@@ -1,5 +1,2 @@
-require "biju/version"
-
-module Biju
-  # Your code goes here...
-end
+require 'biju/version'
+require "biju/sms"
