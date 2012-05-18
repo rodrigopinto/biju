@@ -1,6 +1,7 @@
 # Biju
 
 [WIP] Biju is an easy way to mount a GSM modem to send, to receive and to delete messages through a ruby interface.
+This is project is based on this [code snippet](http://dzone.com/snippets/send-and-receive-sms-text).
 
 ## Installation
 
@@ -18,7 +19,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+@modem = Biju::Modem.new("/dev/tty.HUAWEIMobile-Modem")
+
+# method to list all messages
+@modem.messages.each do |sms|
+  puts sms
+end
+
+@modem.close
+```
+## TODO
+
+1. Write missing test for modem module.
+2. Write a documentation.
+3. Test with different kinds of modem and OS.
 
 ## Contributing
 
