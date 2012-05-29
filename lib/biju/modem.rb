@@ -29,6 +29,12 @@ module Biju
       msgs.collect!{ |msg| Biju::Sms.new(:id => msg[0], :phone_number => msg[1], :datetime => msg[2], :message => msg[3].chomp) }
     end
 
+    # Delete a sms message by id.
+    # @param [Fixnum] Id of sms message on modem.
+    def delete(id)
+      cmd("AT+CMGD=#{id}")
+    end
+
     private
     def connection(options)
       port = options.delete(:port)
