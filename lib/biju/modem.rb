@@ -4,7 +4,8 @@ require_relative 'sms'
 module Biju
   class Modem
 
-    # Receives a hash of options where :port is mandatory
+    # @param [Hash] Options to serial connection.
+    # @option options [String] :port The modem port to connect
     #
     #   Biju::Modem.new(:port => '/dev/ttyUSB0')
     #
@@ -15,14 +16,12 @@ module Biju
       cmd("AT+CMGF=1")
     end
 
-    # Close the serial port connection.
+    # Close the serial connection.
     def close
       @connection.close
     end
 
-    # Returns an Array of Sms if there is messages,
-    # if not other way return nil
-    #
+    # Return an Array of Sms if there is messages nad return nil if not.
     def messages
       sms = cmd("AT+CMGL=\"ALL\"")
       msgs = sms.scan(/\+CMGL\:\s*?(\d+)\,.*?\,\"(.+?)\"\,.*?\,\"(.+?)\".*?\n(.*)/)
@@ -36,7 +35,6 @@ module Biju
       SerialPort.new(port, default_options.merge!(options))
     end
 
-    # private method that generate default values for serial port connection
     def default_options
       { :baud => 9600, :data_bits => 8, :stop_bits => 1, :parity => SerialPort::NONE }
     end
