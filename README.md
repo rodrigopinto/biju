@@ -20,7 +20,7 @@ Or install it yourself as:
 ## Usage
 
 ```
-@modem = Biju::Modem.new("/dev/tty.HUAWEIMobile-Modem")
+@modem = Biju::Modem.new(:port => "/dev/tty.HUAWEIMobile-Modem")
 
 # method to list all messages
 @modem.messages.each do |sms|
