@@ -35,6 +35,17 @@ module Biju
       cmd("AT+CMGD=#{id}")
     end
 
+    def send(sms, options = {})
+      # initiate the sms, and wait for either
+      # the text prompt or an error message
+      cmd("AT+CMGS=\"#{sms.phone_number}\"")
+
+      # send the sms, and wait until
+      # it is accepted or rejected
+      cmd("#{sms.message}#{26.chr}")
+      # ... check reception
+    end
+
     private
     def connection(options)
       port = options.delete(:port)
