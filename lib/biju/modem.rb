@@ -9,11 +9,20 @@ module Biju
     #
     #   Biju::Modem.new(:port => '/dev/ttyUSB0')
     #
-    def initialize(options={})
+    def initialize(options={}, &block)
       raise Exception.new("Port is required") unless options[:port]
+      pin = options.delete(:pin)
       @connection = connection(options)
       cmd("AT")
+      # initialize modem
+      cmd("ATZ")
+      # unlock pin code
+      cmd("AT+CPIN=\"#{pin}\"") if pin
+      # set SMS text mode
       cmd("AT+CMGF=1")
+      # set extended error reports
+      cmd('AT+CMEE=1')
+      #instance_eval &block if block_given?
     end
 
     # Close the serial connection.
@@ -22,8 +31,12 @@ module Biju
     end
 
     # Return an Array of Sms if there is messages nad return nil if not.
-    def messages
-      sms = cmd("AT+CMGL=\"ALL\"")
+    def messages(which = "ALL")
+      # read message from all storage in the mobile phone (sim+mem)
+      cmd('AT+CPMS="MT"')
+      # get message list
+      sms = cmd('AT+CMGL="%s"' % which )
+      # collect messages
       msgs = sms.scan(/\+CMGL\:\s*?(\d+)\,.*?\,\"(.+?)\"\,.*?\,\"(.+?)\".*?\n(.*)/)
       return nil unless msgs
       msgs.collect!{ |msg| Biju::Sms.new(:id => msg[0], :phone_number => msg[1], :datetime => msg[2], :message => msg[3].chomp) }
@@ -58,7 +71,8 @@ module Biju
 
     def cmd(cmd)
       @connection.write(cmd + "\r")
-      wait
+      wait_str = wait
+      #p "#{cmd} --> #{wait_str}"
     end
 
     def wait
