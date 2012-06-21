@@ -27,6 +27,10 @@ Or install it yourself as:
   puts sms
 end
 
+# method to send sms
+sms = Biju::Sms.new(:phone_number => '+3312345678', :message => 'hello world')
+@modem.send(sms)
+
 @modem.close
 ```
 ## TODO
