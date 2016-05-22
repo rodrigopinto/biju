@@ -48,7 +48,7 @@ module Biju
       cmd("AT+CMGD=#{id}")
     end
 
-    def send(sms, options = {})
+    def send_sms(sms, options = {})
       # initiate the sms, and wait for either
       # the text prompt or an error message
       cmd("AT+CMGS=\"#{sms.phone_number}\"")
